@@ -23,7 +23,7 @@ export default function EntegrasyonlarPage() {
         <p className="text-[11px] font-black uppercase tracking-[0.2em] mb-2 text-indigo-500/80">Intelligence Hub</p>
         <h1 className="text-[32px] font-black tracking-tight text-slate-900 leading-none">Veri Entegrasyonları</h1>
         <p className="text-[14px] mt-2 text-slate-500 font-medium max-w-2xl">
-          Dijital ekosisteminizi tek bir merkezden yönetin. Tüm platformları Hirdavat Pro terminaline bağlayarak AI optimizasyonunu aktif edin.
+          Dijital ekosisteminizi tek bir merkezden yönetin. Tüm platformları AgencyOS terminaline bağlayarak AI optimizasyonunu aktif edin.
         </p>
       </div>
 
@@ -94,7 +94,7 @@ export default function EntegrasyonlarPage() {
           </div>
           <h2 className="text-[24px] font-black leading-tight mb-4">Enterprise Grade Security & Compliance</h2>
           <p className="text-slate-400 text-[15px] leading-relaxed mb-8">
-            Hirdavat Pro, veri güvenliğinizi en üst düzeyde tutmak için 256-bit AES şifreleme ve resmi API protokollerini kullanır. 
+            AgencyOS, veri güvenliğinizi en üst düzeyde tutmak için 256-bit AES şifreleme ve resmi API protokollerini kullanır. 
             Hiçbir şifreniz sistemimizde saklanmaz, tüm bağlantılar OAuth 2.0 üzerinden güvenle gerçekleştirilir.
           </p>
           <div className="flex items-center gap-6">

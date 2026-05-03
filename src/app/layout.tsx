@@ -6,8 +6,8 @@ import { ClerkProvider } from '@clerk/nextjs'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Hirdavat Pro Intelligence — Enterprise AI Terminal',
-  description: 'Ultra-premium, AI-powered operating system for high-end digital management.',
+  title: 'AgencyOS — AI-Powered Intelligence Terminal',
+  description: 'The premium operating system for high-performance agencies.',
 }
 
 export default function RootLayout({

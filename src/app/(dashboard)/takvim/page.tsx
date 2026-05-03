@@ -326,7 +326,7 @@ export default function TakvimPage() {
                       <Cloud size={28} />
                    </div>
                    <div>
-                      <h2 className="text-[24px] font-black text-slate-900 tracking-tight">Hirdavat Pro Drive</h2>
+                      <h2 className="text-[20px] font-black text-slate-900">AgencyOS Drive</h2>
                       <p className="text-[13px] text-slate-500 font-medium italic">Ajans varlıklarına ve içerik havuzuna anlık erişim.</p>
                    </div>
                 </div>

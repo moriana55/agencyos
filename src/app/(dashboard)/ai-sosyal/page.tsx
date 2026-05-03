@@ -205,7 +205,7 @@ export default function AISosyalPage() {
                    <div>
                       <h3 className="text-[20px] font-black text-slate-900 tracking-tight">AI Bilgi Havuzu</h3>
                       <p className="text-[14px] text-slate-500 mt-1 leading-relaxed max-w-2xl">
-                        Yapay zekayı Hirdavat Pro standartlarına göre eğitin. Fiyat listeleri, kampanya detayları ve müşteri yanıt kuralları tüm otomatik iletişimde bu temel üzerine inşa edilir.
+                        Yapay zekayı AgencyOS standartlarına göre eğitin. Fiyat listeleri, kampanya detayları ve müşteri yanıt kuralları tüm otomatik iletişimde bu temel üzerine inşa edilir.
                       </p>
                    </div>
                 </div>
