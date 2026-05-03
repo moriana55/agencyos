@@ -1,24 +1,57 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Check, Zap, Shield, Crown, 
   ArrowUpRight, CreditCard, Sparkles,
-  CheckCircle2, Star, X
+  CheckCircle2, Star, X, Loader2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AbonelikPage() {
+  const [currentPlan, setCurrentPlan] = useState<string>('free');
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
   const [upgrading, setUpgrading] = useState<string | null>(null);
   const [successModal, setSuccessModal] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleUpgrade = (planId: string) => {
+  useEffect(() => {
+    fetchSubscription();
+  }, []);
+
+  const fetchSubscription = async () => {
+    try {
+      const res = await fetch('/api/subscription');
+      const data = await res.json();
+      if (data.subscription) setCurrentPlan(data.subscription.plan);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpgrade = async (planId: string) => {
     setUpgrading(planId);
-    setTimeout(() => {
+    try {
+      const res = await fetch('/api/subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          plan: planId,
+          billingCycle
+        }),
+      });
+
+      if (res.ok) {
+        setSuccessModal(planId);
+        fetchSubscription();
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
       setUpgrading(null);
-      setSuccessModal(planId);
-    }, 2000);
+    }
   };
 
   const plans = [
@@ -31,7 +64,6 @@ export default function AbonelikPage() {
       icon: Zap,
       color: 'text-blue-600',
       bg: 'bg-blue-50',
-      border: 'border-blue-100',
       popular: false
     },
     {
@@ -43,7 +75,6 @@ export default function AbonelikPage() {
       icon: Star,
       color: 'text-indigo-600',
       bg: 'bg-indigo-50',
-      border: 'border-indigo-200',
       popular: true
     },
     {
@@ -55,17 +86,25 @@ export default function AbonelikPage() {
       icon: Crown,
       color: 'text-amber-600',
       bg: 'bg-amber-50',
-      border: 'border-amber-100',
       popular: false
     }
   ];
+
+  if (loading) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-4">
+        <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+        <p className="text-slate-400 font-bold uppercase tracking-widest text-[11px]">Banka Verileri Yükleniyor...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-10 pb-20">
       {/* Header */}
       <div className="text-center pt-10 space-y-4">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 text-indigo-600 text-[12px] font-bold uppercase tracking-widest border border-indigo-100">
-          <Sparkles size={14} /> Planını Seç, Gücü Yönet
+          <Sparkles size={14} /> Mevcut Planın: <span className="text-indigo-800 ml-1">{currentPlan.toUpperCase()}</span>
         </div>
         <h1 className="text-4xl font-black text-slate-900 tracking-tight">Ajansınız İçin En Uygun Plan</h1>
         <p className="text-slate-500 max-w-2xl mx-auto text-[16px]">
@@ -92,63 +131,74 @@ export default function AbonelikPage() {
 
       {/* Pricing Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
-        {plans.map((plan, i) => (
-          <motion.div 
-            key={plan.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className={`card p-8 flex flex-col relative transition-all hover:shadow-2xl ${plan.popular ? 'border-2 border-indigo-600 scale-105 z-10' : ''}`}
-          >
-            {plan.popular && (
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-indigo-600 text-white px-4 py-1 rounded-full text-[12px] font-black uppercase tracking-widest shadow-xl">
-                En Popüler
-              </div>
-            )}
-            
-            <div className="space-y-6 flex-1">
-              <div className="flex items-center justify-between">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${plan.bg} ${plan.color}`}>
-                  <plan.icon size={24} />
+        {plans.map((plan, i) => {
+          const isCurrent = currentPlan === plan.id;
+          
+          return (
+            <motion.div 
+              key={plan.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              className={`card p-8 flex flex-col relative transition-all hover:shadow-2xl ${plan.popular ? 'border-2 border-indigo-600 scale-105 z-10' : ''} ${isCurrent ? 'ring-4 ring-emerald-500/10 border-emerald-200' : ''}`}
+            >
+              {plan.popular && (
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-indigo-600 text-white px-4 py-1 rounded-full text-[12px] font-black uppercase tracking-widest shadow-xl">
+                  En Popüler
+                </div>
+              )}
+              
+              <div className="space-y-6 flex-1">
+                <div className="flex items-center justify-between">
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${plan.bg} ${plan.color}`}>
+                    <plan.icon size={24} />
+                  </div>
+                  {isCurrent && (
+                    <div className="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 border border-emerald-100">
+                      <CheckCircle2 size={12} /> Mevcut Plan
+                    </div>
+                  )}
+                </div>
+                
+                <div>
+                  <h3 className="text-xl font-black text-slate-900">{plan.name}</h3>
+                  <p className="text-[13px] text-slate-500 mt-1">{plan.desc}</p>
+                </div>
+
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-black text-slate-900">{plan.price}</span>
+                  <span className="text-slate-400 text-[14px] font-bold">/ay</span>
+                </div>
+
+                <div className="space-y-4 pt-6 border-t border-slate-50">
+                  {plan.features.map((f, j) => (
+                    <div key={j} className="flex items-center gap-3">
+                      <div className="w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center border border-emerald-100">
+                        <Check size={12} className="text-emerald-600" />
+                      </div>
+                      <span className="text-[14px] text-slate-600 font-medium">{f}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
-              
-              <div>
-                <h3 className="text-xl font-black text-slate-900">{plan.name}</h3>
-                <p className="text-[13px] text-slate-500 mt-1">{plan.desc}</p>
-              </div>
 
-              <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-black text-slate-900">{plan.price}</span>
-                <span className="text-slate-400 text-[14px] font-bold">/ay</span>
-              </div>
-
-              <div className="space-y-4 pt-6 border-t border-slate-50">
-                {plan.features.map((f, j) => (
-                  <div key={j} className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center border border-emerald-100">
-                      <Check size={12} className="text-emerald-600" />
-                    </div>
-                    <span className="text-[14px] text-slate-600 font-medium">{f}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <button 
-              onClick={() => handleUpgrade(plan.id)}
-              disabled={upgrading === plan.id}
-              className={`w-full py-4 mt-10 rounded-2xl text-[14px] font-black transition-all flex items-center justify-center gap-2 ${
-                plan.popular 
-                  ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100 hover:bg-indigo-500 disabled:opacity-70' 
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200 disabled:opacity-70'
-              }`}
-            >
-              {upgrading === plan.id ? <Loader2 size={18} className="animate-spin" /> : (plan.id === 'starter' ? 'Şimdi Başla' : 'Planı Yükselt')} 
-              <ArrowUpRight size={18} />
-            </button>
-          </motion.div>
-        ))}
+              <button 
+                onClick={() => !isCurrent && handleUpgrade(plan.id)}
+                disabled={upgrading === plan.id || isCurrent}
+                className={`w-full py-4 mt-10 rounded-2xl text-[14px] font-black transition-all flex items-center justify-center gap-2 ${
+                  isCurrent 
+                    ? 'bg-slate-50 text-slate-400 cursor-default' 
+                    : plan.popular 
+                      ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100 hover:bg-indigo-500' 
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                } disabled:opacity-70`}
+              >
+                {upgrading === plan.id ? <Loader2 size={18} className="animate-spin" /> : isCurrent ? 'Aktif Kullanılıyor' : 'Planı Yükselt'} 
+                {!isCurrent && <ArrowUpRight size={18} />}
+              </button>
+            </motion.div>
+          );
+        })}
       </div>
 
       {/* Success Modal */}
@@ -173,7 +223,7 @@ export default function AbonelikPage() {
 
               <h2 className="text-[28px] font-black text-slate-900 leading-tight mb-3">Yeni Güçlerin Aktif Edildi!</h2>
               <p className="text-slate-500 text-[15px] leading-relaxed mb-10 px-6">
-                Tebrikler kanka! {plans.find(p => p.id === successModal)?.name} ile ajansını bir üst seviyeye taşıdın. AI asistanın artık senin için daha fazla çalışmaya hazır.
+                Tebrikler üstad! {plans.find(p => p.id === successModal)?.name} ile ajansını bir üst seviyeye taşıdın. AI asistanın artık senin için daha fazla çalışmaya hazır.
               </p>
 
               <button 
@@ -199,15 +249,11 @@ export default function AbonelikPage() {
           </div>
         </div>
         <div className="flex items-center gap-6 opacity-50 grayscale">
-          <span className="font-bold text-slate-400">VISA</span>
-          <span className="font-bold text-slate-400">MASTERCARD</span>
-          <span className="font-bold text-slate-400">TROY</span>
+          <span className="font-bold text-slate-400 text-[20px]">VISA</span>
+          <span className="font-bold text-slate-400 text-[20px]">MASTERCARD</span>
+          <span className="font-bold text-slate-400 text-[20px]">TROY</span>
         </div>
       </div>
     </div>
   );
-}
-
-function Loader2({ size, className }: { size: number, className: string }) {
-  return <div className={`border-2 border-current border-t-transparent rounded-full animate-spin`} style={{ width: size, height: size }} />;
 }
