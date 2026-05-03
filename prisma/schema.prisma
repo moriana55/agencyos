@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id            String    @id
+  email         String    @unique
+  subscription  Subscription?
+  knowledge     AgencyKnowledge?
+  clients       Client[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Client {
+  id            String    @id @default(cuid())
+  name          String
+  sector        String?
+  status        String    @default("active") // active, passive
+  logo          String?
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  campaigns     Campaign[]
+  appointments  Appointment[]
+  automations   AutomationLog[]
+  posts         Post[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Campaign {
+  id            String    @id @default(cuid())
+  name          String
+  platform      String    // Meta, Google, TikTok
+  status        String    @default("active")
+  budget        Float     @default(0)
+  spend         Float     @default(0)
+  roas          Float     @default(0)
+  clicks        Int       @default(0)
+  clientId      String
+  client        Client    @relation(fields: [clientId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Appointment {
+  id            String    @id @default(cuid())
+  clientName    String
+  service       String
+  date          DateTime
+  status        String    @default("pending") // pending, confirmed, cancelled
+  clientId      String?
+  client        Client?   @relation(fields: [clientId], references: [id])
+  createdAt     DateTime  @default(now())
+}
+
+model AutomationLog {
+  id            String    @id @default(cuid())
+  type          String    // Comment, DM, AdOptimization
+  trigger       String
+  action        String
+  clientId      String
+  client        Client    @relation(fields: [clientId], references: [id])
+  createdAt     DateTime  @default(now())
+}
+
+model Post {
+  id            String    @id @default(cuid())
+  title         String
+  caption       String?
+  platforms     String    // Komma ile ayrılmış: instagram,tiktok,etc
+  status        String    @default("draft") // draft, scheduled, published, failed
+  scheduledAt   DateTime?
+  clientId      String
+  client        Client    @relation(fields: [clientId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model AgencyKnowledge {
+  id            String    @id @default(cuid())
+  content       String
+  userId        String    @unique
+  user          User      @relation(fields: [userId], references: [id])
+  updatedAt     DateTime  @updatedAt
+}
+
+model Subscription {
+  id            String    @id @default(cuid())
+  plan          String    @default("free") // free, basic, pro, agency
+  billingCycle  String    @default("monthly") // monthly, 3months, 6months, yearly
+  status        String    @default("active") // active, paused, cancelled
+  expiresAt     DateTime?
+  userId        String    @unique
+  user          User      @relation(fields: [userId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
