@@ -191,7 +191,7 @@ export default function LandingPage() {
             ].map((f, i) => (
               <div key={i} className="card p-8 bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/10 transition-all group cursor-default">
                 <div className={`w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform ${f.color}`}>
-                  <f.icon size={24} />
+                  <f.icon size={24} className="" />
                 </div>
                 <h3 className="text-xl font-bold mb-3">{f.title}</h3>
                 <p className="text-slate-500 text-[14px] leading-relaxed">{f.desc}</p>
@@ -281,8 +281,8 @@ export default function LandingPage() {
   );
 }
 
-function Calendar({ size, className }: { size: number, className: string }) {
-  return <CalendarDays className={className} size={size} />;
+function Calendar({ size, className }: { size: number, className?: string }) {
+  return <CalendarDays className={className || ""} size={size} />;
 }
 
 import { CalendarDays } from 'lucide-react';
