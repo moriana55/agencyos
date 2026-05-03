@@ -25,7 +25,7 @@ interface Profile {
   initials: string
 }
 
-export default function Sidebar({ profile }: { profile: Profile }) {
+export default function Sidebar({ profile, isMobile }: { profile: Profile, isMobile?: boolean }) {
   const pathname = usePathname()
   const router   = useRouter()
   const { signOut } = useClerk()
