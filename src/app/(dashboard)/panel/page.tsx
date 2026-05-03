@@ -123,12 +123,21 @@ export default function Dashboard() {
                 ))}
               </div>
             </div>
-            <div className="w-full md:w-auto">
+            <div className="w-full md:w-auto flex flex-col gap-3">
               <button 
                 onClick={() => router.push('/musteriler')}
                 className="w-full md:w-auto px-10 py-5 rounded-2xl bg-indigo-600 text-white font-black text-lg hover:bg-indigo-500 shadow-2xl shadow-indigo-200 transition-all active:scale-95 flex items-center justify-center gap-3"
               >
                 Hadi Başlayalım <ArrowUpRight size={24} />
+              </button>
+              <button 
+                onClick={async () => {
+                  const res = await fetch('/api/seed', { method: 'POST' });
+                  if (res.ok) window.location.reload();
+                }}
+                className="w-full md:w-auto px-10 py-3 rounded-2xl bg-slate-900 text-white font-bold text-[13px] hover:bg-slate-800 transition-all flex items-center justify-center gap-2 border border-white/10"
+              >
+                <Zap size={16} className="text-amber-400" /> Sistemi Demo Verilerle Canlandır
               </button>
             </div>
           </div>
