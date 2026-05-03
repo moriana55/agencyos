@@ -14,7 +14,7 @@ export async function GET() {
     });
 
     // Map DB fields to what the UI expects
-    const mappedPosts = posts.map(p => ({
+    const mappedPosts = posts.map((p: any) => ({
       id: p.id,
       client_id: p.clientId,
       client_name: p.client.name,
