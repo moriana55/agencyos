@@ -416,7 +416,7 @@ export default function ReklamPage() {
                 <div className="space-y-1.5">
                   <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Platform</label>
                   <div className="flex gap-2">
-                    {['Meta', 'Google'].map(p => (
+                    {['Meta', 'Google'].map((p: any) => (
                       <button 
                         key={p} type="button" 
                         onClick={() => setNewCampaign({...newCampaign, platform: p as any})}

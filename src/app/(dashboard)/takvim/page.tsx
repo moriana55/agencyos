@@ -252,7 +252,7 @@ export default function TakvimPage() {
                     <select value={form.client_id} onChange={e => setForm(f=>({...f,client_id:e.target.value}))}
                       className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-[14px] font-bold outline-none focus:ring-4 ring-indigo-500/5 transition-all">
                       <option value="">Müşteri Seçin...</option>
-                      {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                      {clients.map((c: any) => <option key={c.id} value={c.id}>{c.name}</option>)}
                     </select>
                   </div>
                   <div className="space-y-2">
@@ -279,7 +279,7 @@ export default function TakvimPage() {
                 <div className="space-y-4">
                   <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest">Hedef Platformlar</label>
                   <div className="flex flex-wrap gap-3">
-                    {PLATFORMS.map(p => {
+                    {PLATFORMS.map((p: any) => {
                       const isActive = form.platforms.includes(p.id);
                       return (
                         <button key={p.id} onClick={() => togglePlatform(p.id)}
