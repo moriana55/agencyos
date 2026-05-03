@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import { 
   Plus, Search, Filter, 
   Globe, Camera, MessageCircle, 
-  ArrowUpRight, Building2, Trash2, X
+  ArrowUpRight, Building2, Trash2, X,
+  ShieldCheck, Zap, Target
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -51,19 +52,20 @@ export default function MusterilerPage() {
   };
 
   return (
-    <div className="space-y-7 pb-20">
+    <div className="space-y-8 pb-20">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pt-2">
         <div>
-          <p className="text-[12px] font-semibold uppercase tracking-widest mb-2 text-slate-400">Yönetim</p>
-          <h1 className="text-[28px] font-bold tracking-tight text-slate-900">Müşteri Portföyü</h1>
-          <p className="text-[14px] mt-1 text-slate-500">Tüm markalarınızı ve bağlantı durumlarını buradan yönetin.</p>
+          <p className="text-[11px] font-black uppercase tracking-[0.2em] mb-2 text-indigo-500/80">Client Intelligence</p>
+          <h1 className="text-[32px] font-black tracking-tight text-slate-900 leading-none">Müşteri Portföyü</h1>
+          <p className="text-[14px] mt-2 text-slate-500 font-medium">Tüm markalarınızı ve bağlantı durumlarını buradan yönetin.</p>
         </div>
         <button 
           onClick={() => setShowAddModal(true)}
-          className="btn-primary flex items-center gap-2"
+          className="btn-primary glow-indigo px-6 py-3 rounded-2xl flex items-center gap-2 group"
         >
-          <Plus size={18} /> Yeni Müşteri Ekle
+          <Plus size={18} className="group-hover:rotate-90 transition-transform" /> 
+          <span className="text-[14px] font-bold">Yeni Müşteri Ekle</span>
         </button>
       </div>
 
@@ -74,11 +76,11 @@ export default function MusterilerPage() {
           <input 
             type="text" 
             placeholder="Müşteri ara..." 
-            className="w-full pl-9 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-[13px] outline-none focus:ring-2 ring-indigo-500/10 transition-all"
+            className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-[13px] outline-none focus:ring-4 ring-indigo-500/5 transition-all"
           />
         </div>
         <div className="flex items-center gap-3">
-          <button className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-[13px] font-bold text-slate-600 flex items-center gap-2">
+          <button className="px-5 py-3 rounded-2xl bg-white border border-slate-200 text-[13px] font-bold text-slate-600 flex items-center gap-2 hover:border-indigo-200 transition-all">
             <Filter size={16} /> Filtrele
           </button>
         </div>
@@ -87,41 +89,55 @@ export default function MusterilerPage() {
       {/* Client Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {loading ? (
-           <div className="col-span-full py-20 text-center text-slate-400 font-bold">Müşteriler Yükleniyor...</div>
+           <div className="col-span-full py-20 text-center">
+              <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+              <p className="text-slate-400 font-bold uppercase tracking-widest text-[11px]">Intel Data Fetching...</p>
+           </div>
         ) : clients.length === 0 ? (
-           <div className="col-span-full py-20 card border-dashed flex flex-col items-center justify-center text-slate-400">
-              <Building2 size={48} className="mb-4 opacity-20" />
-              <p className="font-bold">Henüz müşteri eklenmemiş.</p>
-              <button onClick={() => setShowAddModal(true)} className="text-indigo-600 hover:underline mt-2">İlk müşterinizi ekleyin</button>
+           <div className="col-span-full py-20 intel-card border-dashed flex flex-col items-center justify-center text-slate-400">
+              <div className="w-16 h-16 bg-slate-50 rounded-3xl flex items-center justify-center mb-4">
+                 <Building2 size={32} className="opacity-20" />
+              </div>
+              <p className="font-black uppercase tracking-wider text-[13px]">Henüz müşteri eklenmemiş.</p>
+              <button onClick={() => setShowAddModal(true)} className="text-indigo-600 font-bold mt-2 hover:underline">İlk müşterinizi ekleyin</button>
            </div>
         ) : (
-          clients.map((client: any) => (
+          clients.map((client: any, i: number) => (
             <motion.div 
               key={client.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.05 }}
               onClick={() => router.push(`/musteriler/${client.id}`)}
-              className="card p-5 group hover:border-indigo-200 transition-all cursor-pointer"
+              className="intel-card group cursor-pointer hover:border-indigo-300 transition-all relative overflow-hidden"
             >
-              <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-black text-xl group-hover:scale-110 transition-transform">
+              <div className="flex items-start justify-between mb-6">
+                <div className="w-14 h-14 rounded-2xl bg-slate-50 text-slate-900 border border-slate-100 flex items-center justify-center font-black text-2xl group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm">
                   {client.name[0]}
                 </div>
-                <div className="flex gap-1 opacity-40 group-hover:opacity-100 transition-opacity">
-                  <button className="p-2 text-slate-400 hover:text-indigo-600"><ArrowUpRight size={18} /></button>
+                <div className="p-2 bg-slate-50 text-slate-400 rounded-xl opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0">
+                  <ArrowUpRight size={18} />
                 </div>
               </div>
               
-              <h3 className="text-[16px] font-black text-slate-900 mb-1 group-hover:text-indigo-600 transition-colors">{client.name}</h3>
-              <p className="text-[13px] text-slate-400 font-medium mb-4">{client.sector || 'Sektör Belirtilmedi'}</p>
+              <h3 className="text-[18px] font-black text-slate-900 mb-1 leading-tight">{client.name}</h3>
+              <p className="text-[12px] text-slate-400 font-bold uppercase tracking-widest mb-6">{client.sector || 'Sektör Belirtilmedi'}</p>
               
-              <div className="flex items-center gap-2 pt-4 border-t border-slate-50">
+              <div className="flex items-center justify-between pt-5 border-t border-slate-50">
                 <div className="flex -space-x-2">
-                  <div className="w-7 h-7 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-rose-500"><Camera size={12} /></div>
-                  <div className="w-7 h-7 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-emerald-500"><MessageCircle size={12} /></div>
+                   {[Globe, Camera, Zap].map((Icon, idx) => (
+                     <div key={idx} className="w-8 h-8 rounded-full bg-white border-2 border-slate-50 flex items-center justify-center text-slate-400 group-hover:text-indigo-600 transition-colors shadow-sm">
+                        <Icon size={12} />
+                     </div>
+                   ))}
                 </div>
-                <span className="text-[11px] font-bold text-slate-400 ml-auto uppercase tracking-wider">Aktif Dosya</span>
+                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-lg">
+                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                   <span className="text-[10px] font-black uppercase">Active</span>
+                </div>
               </div>
+              
+              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity" />
             </motion.div>
           ))
         )}
@@ -133,39 +149,43 @@ export default function MusterilerPage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div 
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
               onClick={() => setShowAddModal(false)}
             />
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl p-8"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-md bg-white rounded-[32px] shadow-2xl p-10 overflow-hidden"
             >
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-black text-slate-900">Yeni Müşteri</h3>
-                <button onClick={() => setShowAddModal(false)} className="p-2 hover:bg-slate-50 rounded-xl transition-all"><X size={20} /></button>
+              <div className="absolute top-0 right-0 p-8 opacity-5">
+                 <Building2 size={120} />
               </div>
               
-              <form onSubmit={handleAddClient} className="space-y-5">
+              <div className="flex items-center justify-between mb-8 relative z-10">
+                <h3 className="text-[24px] font-black text-slate-900 tracking-tight">Yeni Müşteri</h3>
+                <button onClick={() => setShowAddModal(false)} className="p-2.5 hover:bg-slate-50 rounded-2xl transition-all text-slate-400"><X size={20} /></button>
+              </div>
+              
+              <form onSubmit={handleAddClient} className="space-y-6 relative z-10">
                 <div className="space-y-2">
-                  <label className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Marka Adı</label>
+                  <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Marka Adı</label>
                   <input 
                     required
                     value={newClient.name}
                     onChange={(e) => setNewClient({...newClient, name: e.target.value})}
                     placeholder="Örn: Bella Fashion"
-                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-[14px] outline-none focus:ring-2 ring-indigo-500/10 transition-all"
+                    className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl text-[14px] font-bold outline-none focus:ring-4 ring-indigo-500/5 transition-all"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Sektör</label>
+                  <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Sektör</label>
                   <input 
                     value={newClient.sector}
                     onChange={(e) => setNewClient({...newClient, sector: e.target.value})}
                     placeholder="Örn: E-ticaret / Moda"
-                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-[14px] outline-none focus:ring-2 ring-indigo-500/10 transition-all"
+                    className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl text-[14px] font-bold outline-none focus:ring-4 ring-indigo-500/5 transition-all"
                   />
                 </div>
-                <button type="submit" className="btn-primary w-full py-4 text-[15px]">Müşteriyi Kaydet</button>
+                <button type="submit" className="btn-primary w-full py-4 text-[15px] rounded-2xl glow-indigo">Müşteriyi Kaydet</button>
               </form>
             </motion.div>
           </div>
