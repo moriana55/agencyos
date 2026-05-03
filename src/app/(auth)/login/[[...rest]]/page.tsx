@@ -41,6 +41,9 @@ export default function LoginPage() {
             dividerText: { color: 'rgba(255,255,255,0.3)' },
           },
         }}
+        forceRedirectUrl="/panel"
+        fallbackRedirectUrl="/panel"
+        signUpUrl="/signup"
       />
     </div>
   )
