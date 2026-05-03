@@ -25,8 +25,8 @@ export async function GET(req: Request) {
     ]);
 
     const results = [
-      ...clients.map(c => ({ id: c.id, name: c.name, type: 'Müşteri', path: `/musteriler/${c.id}` })),
-      ...campaigns.map(c => ({ id: c.id, name: c.name, type: 'Kampanya', path: '/reklam' }))
+      ...clients.map((c: any) => ({ id: c.id, name: c.name, type: 'Müşteri', path: `/musteriler/${c.id}` })),
+      ...campaigns.map((c: any) => ({ id: c.id, name: c.name, type: 'Kampanya', path: '/reklam' }))
     ];
 
     return NextResponse.json({ results });
