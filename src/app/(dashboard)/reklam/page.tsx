@@ -69,6 +69,23 @@ export default function ReklamPage() {
   const totalSpend = campaigns.reduce((acc, c: any) => acc + c.spend, 0);
   const avgRoas = campaigns.length > 0 ? (campaigns.reduce((acc, c: any) => acc + c.roas, 0) / campaigns.length).toFixed(1) : '0';
 
+  const [optimizing, setOptimizing] = useState(false);
+
+  const handleOptimize = async () => {
+    setOptimizing(true);
+    try {
+      const res = await fetch('/api/reklam/optimize', { method: 'POST' });
+      if (res.ok) {
+        fetchData();
+        alert('AI Optimizasyonu Başarıyla Uygulandı! 🚀');
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setOptimizing(false);
+    }
+  };
+
   return (
     <div className="space-y-7 pb-20">
       {/* Header */}
@@ -116,8 +133,16 @@ export default function ReklamPage() {
               <span className="hidden md:inline"> Google Ads tarafında anahtar kelime rekabeti düşük 3 yeni fırsat alanı mevcut.</span>
             </p>
           </div>
-          <button className="px-4 py-2 bg-white border border-indigo-100 rounded-xl text-[12px] font-bold text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
-            Tümünü Uygula
+          <button 
+            onClick={handleOptimize}
+            disabled={optimizing}
+            className={`px-4 py-2 rounded-xl text-[12px] font-bold transition-all shadow-sm ${
+              optimizing 
+                ? 'bg-slate-100 text-slate-400 cursor-not-allowed' 
+                : 'bg-white border border-indigo-100 text-indigo-600 hover:bg-indigo-600 hover:text-white'
+            }`}
+          >
+            {optimizing ? 'Optimize Ediliyor...' : 'Tümünü Uygula'}
           </button>
         </div>
       </motion.div>
