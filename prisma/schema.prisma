@@ -11,6 +11,7 @@ model User {
   email         String    @unique
   subscription  Subscription?
   knowledge     AgencyKnowledge?
+  settings      Settings?
   clients       Client[]
   integrations  Integration[]
   createdAt     DateTime  @default(now())
@@ -101,6 +102,14 @@ model Post {
 model AgencyKnowledge {
   id            String    @id @default(cuid())
   content       String
+  userId        String    @unique
+  user          User      @relation(fields: [userId], references: [id])
+  updatedAt     DateTime  @updatedAt
+}
+
+model Settings {
+  id            String    @id @default(cuid())
+  data          String    // JSON blob
   userId        String    @unique
   user          User      @relation(fields: [userId], references: [id])
   updatedAt     DateTime  @updatedAt

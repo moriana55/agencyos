@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Sparkles, ArrowRight, TrendingUp, AlertTriangle } from 'lucide-react';
+import { Sparkles, ArrowRight, TrendingUp, AlertTriangle, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const insights = [
@@ -9,71 +9,70 @@ const insights = [
     icon: TrendingUp,
     type: 'Optimizasyon',
     text: '"Kış Yeniden Pazarlama" kampanyasında CPA ortalamadan %24 düşük — günlük bütçeyi ₺200 artırın.',
-    color: '#10B981',
-    bg: '#DCFCE7',
+    color: 'text-emerald-400',
+    bg: 'bg-emerald-500/10',
+    border: 'border-emerald-500/20',
     action: 'Uygula',
   },
   {
     icon: AlertTriangle,
     type: 'İçerik Uyarısı',
     text: '"Ürün Lansmanı" videosunda reklam yorgunluğu tespit edildi. Tıklama oranı %0.8 düştü.',
-    color: '#F59E0B',
-    bg: '#FFFBEB',
+    color: 'text-amber-400',
+    bg: 'bg-amber-500/10',
+    border: 'border-amber-500/20',
     action: 'İncele',
   },
 ];
 
 export default function AIInsightCard() {
   return (
-    <div className="card p-6 h-full flex flex-col">
+    <div className="bg-[#0a0a0f]/40 border border-white/5 rounded-[32px] p-8 h-full flex flex-col backdrop-blur-md relative overflow-hidden group">
+      {/* Background glow for the card */}
+      <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-indigo-600/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
+      
       {/* Header */}
-      <div className="flex items-center gap-3 mb-5">
-        <div className="w-9 h-9 rounded-[10px] flex items-center justify-center" style={{ background: '#EEF2FF' }}>
-          <Sparkles className="w-4.5 h-4.5" style={{ color: '#6366F1' }} />
+      <div className="flex items-center gap-4 mb-8 relative z-10">
+        <div className="w-11 h-11 rounded-2xl flex items-center justify-center bg-indigo-500/10 border border-indigo-500/20 shadow-lg">
+          <Sparkles className="w-5 h-5 text-indigo-400 animate-pulse" />
         </div>
         <div>
-          <h3 className="text-[15px] font-semibold" style={{ color: '#0F172A' }}>AI Önerileri</h3>
-          <p className="text-[12px]" style={{ color: '#94A3B8' }}>Otonom kampanya analizi</p>
+          <h3 className="text-[16px] font-black text-white uppercase tracking-tight">AI Strateji Önerileri</h3>
+          <p className="text-[11px] font-black text-slate-600 uppercase tracking-widest mt-0.5">Otonom Kampanya Analizi</p>
         </div>
-        <div className="ml-auto flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold" style={{ background: '#DCFCE7', color: '#166534' }}>
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-          Aktif
+        <div className="ml-auto flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[9px] font-black text-emerald-400 uppercase tracking-widest">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,1)]" />
+          Live
         </div>
       </div>
 
       {/* Insights */}
-      <div className="space-y-3 flex-1">
+      <div className="space-y-4 flex-1 relative z-10">
         {insights.map((ins, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, x: 12 }}
+            initial={{ opacity: 0, x: 16 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 + i * 0.15 }}
-            className="p-4 rounded-[12px] cursor-pointer transition-all"
-            style={{ border: '1px solid #F1F5F9', background: '#FAFBFF' }}
-            onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = '#C7D2FE'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = '#F1F5F9'; }}
+            transition={{ delay: 0.2 + i * 0.15 }}
+            className={`p-5 rounded-3xl border ${ins.border} bg-white/[0.01] hover:bg-white/[0.03] cursor-pointer transition-all group/item shadow-xl`}
           >
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-5 h-5 rounded flex items-center justify-center" style={{ background: ins.bg }}>
-                <ins.icon className="w-3 h-3" style={{ color: ins.color }} />
+            <div className="flex items-center gap-3 mb-3">
+              <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${ins.bg}`}>
+                <ins.icon className={`w-4 h-4 ${ins.color}`} />
               </div>
-              <span className="text-[11px] font-semibold" style={{ color: ins.color }}>{ins.type}</span>
+              <span className={`text-[10px] font-black uppercase tracking-[0.15em] ${ins.color}`}>{ins.type}</span>
             </div>
-            <p className="text-[12px] leading-relaxed mb-3" style={{ color: '#475569' }}>{ins.text}</p>
-            <button className="flex items-center gap-1.5 text-[12px] font-semibold transition-colors" style={{ color: '#6366F1' }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#4F46E5'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = '#6366F1'; }}
-            >
-              {ins.action} <ArrowRight className="w-3 h-3" />
+            <p className="text-[13px] leading-relaxed mb-4 text-slate-400 font-medium">{ins.text}</p>
+            <button className={`flex items-center gap-2 text-[12px] font-black uppercase tracking-widest transition-all ${ins.color} hover:translate-x-1`}>
+              {ins.action} <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </motion.div>
         ))}
       </div>
 
       {/* CTA */}
-      <button className="btn-primary w-full mt-5 justify-center" style={{ borderRadius: '10px' }}>
-        Tam Denetim Başlat <Sparkles className="w-4 h-4" />
+      <button className="w-full mt-8 py-5 bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] hover:border-white/10 text-white font-black text-[12px] uppercase tracking-[0.3em] rounded-[22px] transition-all flex items-center justify-center gap-3 active:scale-95 relative z-10 shadow-lg">
+        Tam Denetim Başlat <Zap className="w-4 h-4 text-amber-400" />
       </button>
     </div>
   );

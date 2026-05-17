@@ -223,7 +223,7 @@ export default function AbonelikPage() {
 
               <h2 className="text-[28px] font-black text-slate-900 leading-tight mb-3">Yeni Güçlerin Aktif Edildi!</h2>
               <p className="text-slate-500 text-[15px] leading-relaxed mb-10 px-6">
-                Tebrikler üstad! {plans.find(p => p.id === successModal)?.name} ile ajansını bir üst seviyeye taşıdın. AI asistanın artık senin için daha fazla çalışmaya hazır.
+                Tebrikler! {plans.find(p => p.id === successModal)?.name} ile ajansını bir üst seviyeye taşıdın. AI asistanın artık senin için daha fazla çalışmaya hazır.
               </p>
 
               <button 

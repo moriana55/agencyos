@@ -35,7 +35,7 @@ export default function NotFound() {
           <h1 className="text-8xl font-black text-slate-900 tracking-tighter">404</h1>
           <h2 className="text-2xl font-bold text-slate-700">Yolunu mu Kaybettin?</h2>
           <p className="text-slate-500 max-w-md mx-auto text-[15px] leading-relaxed">
-            Görünüşe göre aradığın sayfa ajansın dışına kaçmış. Endişelenme, Büşra AI her zaman doğru yolu gösterir!
+            Görünüşe göre aradığın sayfa ajansın dışına kaçmış. Endişelenme, AgencyOS AI her zaman doğru yolu gösterir!
           </p>
         </div>
 

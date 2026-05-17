@@ -6,7 +6,8 @@ import { motion } from 'framer-motion';
 import { 
   Zap, Target, Bot, BarChart3, 
   Check, ArrowRight, Sparkles, Globe, 
-  ShieldCheck, MessageCircle, Play, Layers
+  ShieldCheck, MessageCircle, Play, Layers,
+  CalendarDays
 } from 'lucide-react';
 
 export default function LandingPage() {
@@ -69,7 +70,7 @@ export default function LandingPage() {
             transition={{ delay: 0.2 }}
             className="max-w-2xl mx-auto text-lg md:text-xl text-slate-400 leading-relaxed font-medium"
           >
-            AgencyOS; reklam yönetimini, AI otomasyonunu ve müşteri ilişkilerini tek bir premium platformda birleştirir. Büşra AI asistanınızla operasyonel yükü %80 azaltın.
+            AgencyOS; reklam yönetimini, AI otomasyonunu ve müşteri ilişkilerini tek bir premium platformda birleştirir. Gelişmiş AI asistanınızla operasyonel yükü %80 azaltın.
           </motion.p>
 
           <motion.div 
@@ -154,7 +155,7 @@ export default function LandingPage() {
             {[
               { 
                 title: 'Smart Ads Manager', 
-                desc: 'Meta, Google ve TikTok reklamlarınızı tek bir şık panelden yönetin. Büşra AI bütçenizi her gün optimize etsin.',
+                desc: 'Meta, Google ve TikTok reklamlarınızı tek bir şık panelden yönetin. Yapay zeka bütçenizi her gün otomatik optimize etsin.',
                 icon: Target,
                 color: 'text-rose-500'
               },
@@ -284,5 +285,3 @@ export default function LandingPage() {
 function Calendar({ size, className }: { size: number, className?: string }) {
   return <CalendarDays className={className || ""} size={size} />;
 }
-
-import { CalendarDays } from 'lucide-react';

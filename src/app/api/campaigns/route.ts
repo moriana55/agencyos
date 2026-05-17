@@ -28,19 +28,61 @@ export async function POST(req: Request) {
     if (!userId) return NextResponse.json({ error: 'Yetkisiz' }, { status: 401 });
 
     const body = await req.json();
-    const { name, platform, budget, status, clientId } = body;
+    const { name, platform, budget, spend, roas, status, clientId } = body;
 
     const campaign = await prisma.campaign.create({
       data: {
         name,
         platform,
-        budget: parseFloat(budget),
+        budget: parseFloat(budget) || 0,
+        spend: parseFloat(spend) || 0,
+        roas: parseFloat(roas) || 0,
         status: status || 'active',
         clientId
       }
     });
 
     return NextResponse.json({ campaign });
+  } catch (error) {
+    return NextResponse.json({ error: 'Hata' }, { status: 500 });
+  }
+}
+
+export async function PATCH(req: Request) {
+  try {
+    const { userId } = await auth();
+    if (!userId) return NextResponse.json({ error: 'Yetkisiz' }, { status: 401 });
+
+    const body = await req.json();
+    const { id, name, platform, budget, spend, roas, clientId } = body;
+
+    const campaign = await prisma.campaign.update({
+      where: { id },
+      data: {
+        name,
+        platform,
+        budget: parseFloat(budget) || 0,
+        spend: parseFloat(spend) || 0,
+        roas: parseFloat(roas) || 0,
+        clientId
+      }
+    });
+
+    return NextResponse.json({ campaign });
+  } catch (error) {
+    return NextResponse.json({ error: 'Hata' }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const { userId } = await auth();
+    if (!userId) return NextResponse.json({ error: 'Yetkisiz' }, { status: 401 });
+
+    const { id } = await req.json();
+    await prisma.campaign.delete({ where: { id } });
+
+    return NextResponse.json({ ok: true });
   } catch (error) {
     return NextResponse.json({ error: 'Hata' }, { status: 500 });
   }
